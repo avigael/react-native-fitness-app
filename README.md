@@ -1,1 +1,4 @@
-# react-native-fitness-app
+# React Native Fitness App
+
+TODO
+[WORK IN PROGRESS]
