@@ -55,6 +55,43 @@ class Today extends React.Component {
     });
   }
 
+  async refresh() {
+    this.setState({ goalDailyActivity: "", activities: [] });
+    const username = this.props.navigation.state.params.username;
+    const token = this.props.navigation.state.params.token;
+    let response = await fetch(
+      "https://avigael-shop-fitness.herokuapp.com/users/" + username,
+      {
+        method: "GET",
+        headers: {
+          Accept: "*/*",
+          "x-access-token": token,
+          Connection: "keep-alive",
+          "cache-control": "no-cache",
+        },
+      }
+    );
+
+    response = await response.json();
+    let activities = await fetch(
+      "https://avigael-shop-fitness.herokuapp.com/activities",
+      {
+        method: "GET",
+        headers: {
+          Accept: "*/*",
+          "x-access-token": token,
+          Connection: "keep-alive",
+          "cache-control": "no-cache",
+        },
+      }
+    );
+    activities = await activities.json();
+    this.setState({
+      goalDailyActivity: response.goalDailyActivity,
+      activities: activities.activities,
+    });
+  }
+
   render() {
     let exercise = [];
     let activityTotal = 0.0;
@@ -63,6 +100,7 @@ class Today extends React.Component {
     activities.forEach((x) => {
       exercise.push(
         <View
+          key={x.id}
           style={{
             alignItems: "center",
             width: 340,
@@ -71,13 +109,15 @@ class Today extends React.Component {
             marginBottom: 15,
           }}
         >
-          <View style={{
-            backgroundColor: "grey",
-            borderRadius: 15,
-            padding: 15,
-            width: "95%",
-            height: "95%",
-          }}>
+          <View
+            style={{
+              backgroundColor: "rgba(230,230,230,1)",
+              borderRadius: 15,
+              padding: 15,
+              width: "95%",
+              height: "95%",
+            }}
+          >
             <Text style={{ fontSize: 25, fontWeight: "bold" }}>{x.name}</Text>
             <Text>{"Duration: " + x.duration + " min"}</Text>
             <Text>{"Calories: " + x.calories + " cal"}</Text>
@@ -147,12 +187,17 @@ class Today extends React.Component {
         height: 275,
         alignSelf: "center",
       },
+      btn_box: {
+        flexDirection: "row",
+        width: "75%",
+        justifyContent: "center",
+      },
       btn_shape: {
         backgroundColor: "rgba(178,108,233,1)",
         borderRadius: 10,
-        width: 200,
+        width: "50%",
         height: 40,
-        marginTop: 20,
+        marginTop: 10,
         justifyContent: "center",
       },
       btn_text: {
@@ -196,6 +241,8 @@ class Today extends React.Component {
           <ScrollView horizontal={false} style={styles.box}>
             <Text>{exercise}</Text>
           </ScrollView>
+        </View>
+        <View style={styles.btn_box}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("Exercise", {
@@ -203,9 +250,18 @@ class Today extends React.Component {
                 token: this.props.navigation.state.params.token,
               });
             }}
-            style={styles.btn_shape}
+            style={[styles.btn_shape, { marginHorizontal: 10 }]}
           >
             <Text style={styles.btn_text}>Add Exercise</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.refresh()}
+            style={[
+              styles.btn_shape,
+              { backgroundColor: "rgba(153,50,245,1)", marginHorizontal: 10 },
+            ]}
+          >
+            <Text style={styles.btn_text}>Refresh</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity

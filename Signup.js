@@ -142,6 +142,7 @@ class Signup extends React.Component {
             style={styles.input_placeholder}
             autoCapitalize="none"
             secureTextEntry={true}
+            autoCorrect={false}
             placeholder="Password"
             onChangeText={this.inputPassword}
           />

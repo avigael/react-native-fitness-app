@@ -127,6 +127,7 @@ class Login extends React.Component {
           <Text style={styles.input_title}>Password</Text>
           <TextInput
             secureTextEntry={true}
+            autoCorrect={false}
             style={styles.input_placeholder}
             autoCapitalize="none"
             placeholder="Password"
