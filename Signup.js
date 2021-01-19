@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
@@ -13,6 +14,7 @@ class Signup extends React.Component {
     this.state = {
       username: "",
       password: "",
+      loading: false,
     };
   }
   static navigationOptions = {
@@ -48,6 +50,8 @@ class Signup extends React.Component {
       return;
     }
 
+    this.setState({ loading: true });
+
     fetch("https://avigael-shop-fitness.herokuapp.com/users", {
       method: "POST",
       headers: {
@@ -60,6 +64,7 @@ class Signup extends React.Component {
       }),
     })
       .then((response) => {
+        this.setState({ loading: true });
         return response.json();
       })
       .then((response) => {
@@ -76,105 +81,84 @@ class Signup extends React.Component {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       },
-      login_box: {
-        width: 350,
-        height: 395,
-        marginTop: 150,
-        alignSelf: "center",
+      input_box: {
+        width: "75%",
+        height: 40,
+        marginBottom: 25,
       },
-      username_box: {
-        width: 262,
-        height: 43,
-        backgroundColor: "rgba(230,230,230,1)",
-        borderRadius: 10,
-        marginTop: 113,
-        marginLeft: 44,
-      },
-      user_title: {
+      input_title: {
         color: "#121212",
-        marginTop: -15,
+        marginTop: -20,
       },
-      username: {
-        color: "#121212",
-        marginTop: 13,
-        marginLeft: 10,
-      },
-      password_box: {
-        width: 262,
-        height: 43,
-        backgroundColor: "rgba(230,230,230,1)",
-        borderRadius: 10,
-        marginTop: 18,
-        marginLeft: 44,
-      },
-      pass_title: {
-        color: "#121212",
-        marginTop: -16,
-      },
-      password: {
-        color: "#121212",
-        marginLeft: 10,
-      },
-      pass_titleFiller: {
+      input_placeholder: {
         flex: 1,
-        justifyContent: "center",
-      },
-      button_box: {
-        width: 223,
-        height: 43,
+        padding: 10,
         borderRadius: 10,
-        justifyContent: "center",
-        marginTop: 22,
-        marginLeft: 64,
+        color: "#121212",
+        backgroundColor: "rgba(230,230,230,1)",
       },
-      button2: {
-        width: 100,
-        height: 43,
+      btn_box: {
+        flexDirection: "row",
+        width: "75%",
+        justifyContent: "center",
+      },
+      btn_shape: {
         backgroundColor: "rgba(99,206,237,1)",
         borderRadius: 10,
+        width: "40%",
+        height: 40,
+        marginHorizontal: 5,
         justifyContent: "center",
-        alignSelf: "center",
       },
-      submit: {
+      btn_text: {
         color: "rgba(255,255,255,1)",
         fontSize: 16,
-        alignSelf: "center",
+        textAlign: "center",
+        fontWeight: "bold",
+      },
+      loading: {
+        padding: 25,
       },
     });
 
     return (
       <View style={styles.container}>
-        <View style={styles.login_box}>
-          <View style={styles.username_box}>
-            <Text style={styles.user_title}>Username</Text>
-            <TextInput
-              style={styles.username}
-              autoCapitalize="none"
-              placeholder="Username"
-              onChangeText={this.inputUsername}
-            />
-          </View>
-          <View style={styles.password_box}>
-            <Text style={styles.pass_title}>Password</Text>
-            <View style={styles.pass_titleFiller}>
-              <TextInput
-                style={styles.password}
-                autoCapitalize="none"
-                placeholder="Password"
-                onChangeText={this.inputPassword}
-              />
-            </View>
-          </View>
-          <View style={styles.button_box}>
-            <TouchableOpacity
-              onPress={() => this.submit()}
-              style={styles.button2}
-            >
-              <Text style={styles.submit}>Submit</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.input_box}>
+          <Text style={styles.input_title}>Username</Text>
+          <TextInput
+            style={styles.input_placeholder}
+            autoCapitalize="none"
+            placeholder="Username"
+            onChangeText={this.inputUsername}
+          />
         </View>
+        <View style={styles.input_box}>
+          <Text style={styles.input_title}>Password</Text>
+          <TextInput
+            style={styles.input_placeholder}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            placeholder="Password"
+            onChangeText={this.inputPassword}
+          />
+        </View>
+        <View style={styles.btn_box}>
+          <TouchableOpacity
+            onPress={() => this.submit()}
+            style={styles.btn_shape}
+          >
+            <Text style={styles.btn_text}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+        <ActivityIndicator
+          animating={this.state.loading}
+          style={styles.loading}
+          size="large"
+        />
       </View>
     );
   }

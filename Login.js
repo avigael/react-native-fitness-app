@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
@@ -14,6 +15,7 @@ class Login extends React.Component {
     this.state = {
       username: "",
       password: "",
+      loading: false,
     };
   }
 
@@ -22,6 +24,7 @@ class Login extends React.Component {
   };
 
   logIn = () => {
+    this.setState({ loading: true });
     fetch("https://avigael-shop-fitness.herokuapp.com/login", {
       method: "GET",
       headers: {
@@ -36,6 +39,7 @@ class Login extends React.Component {
       },
     })
       .then((response) => {
+        this.setState({ loading: false });
         return response.json();
       })
       .then((response) => {
@@ -56,146 +60,104 @@ class Login extends React.Component {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-      },
-      login_box: {
-        width: 350,
-        height: 395,
-        marginTop: 50,
-        alignSelf: "center",
-      },
-      username_box: {
-        width: 262,
-        height: 43,
-        position: "absolute",
-        backgroundColor: "rgba(230,230,230,1)",
-        borderRadius: 10,
-        top: 210,
-        left: 0,
-      },
-      user_title: {
-        color: "#121212",
-        marginTop: -16,
-      },
-      username: {
-        color: "#121212",
-        marginTop: 14,
-        marginLeft: 10,
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "center",
       },
       icon: {
-        top: 0,
-        position: "absolute",
-        color: "#121212",
         fontSize: 161,
-        left: 51,
+        textAlign: "center",
+        marginBottom: 25,
       },
-      username_boxStack: {
-        width: 262,
-        height: 253,
-        marginLeft: 44,
+      input_box: {
+        width: "75%",
+        height: 40,
+        marginBottom: 25,
       },
-      password_box: {
-        width: 262,
-        height: 43,
+      input_title: {
+        color: "#121212",
+        marginTop: -20,
+      },
+      input_placeholder: {
+        flex: 1,
+        padding: 10,
+        borderRadius: 10,
+        color: "#121212",
         backgroundColor: "rgba(230,230,230,1)",
-        borderRadius: 10,
-        marginTop: 23,
-        marginLeft: 0,
-        alignSelf: "center",
       },
-      pass_title: {
-        color: "#121212",
-        marginTop: -16,
-      },
-      password: {
-        color: "#121212",
-        marginTop: 14,
-        marginLeft: 10,
-      },
-      button_box: {
-        width: 223,
-        height: 43,
-        borderRadius: 10,
+      btn_box: {
         flexDirection: "row",
-        marginTop: 10,
-        marginLeft: 64,
+        width: "75%",
+        justifyContent: "center",
       },
-      login_btn: {
-        width: 100,
-        height: 43,
+      btn_shape: {
         backgroundColor: "rgba(99,206,237,1)",
         borderRadius: 10,
-        alignSelf: "center",
+        width: "40%",
+        height: 40,
+        marginHorizontal: 5,
+        justifyContent: "center",
       },
-      signin: {
+      btn_text: {
         color: "rgba(255,255,255,1)",
         fontSize: 16,
-        marginTop: 13,
-        marginLeft: 27,
+        textAlign: "center",
+        fontWeight: "bold",
       },
-      login_btnFiller: {
-        flex: 1,
-        flexDirection: "row",
-      },
-      signup_btn: {
-        width: 100,
-        height: 43,
-        backgroundColor: "rgba(153,50,245,1)",
-        borderRadius: 10,
-        alignSelf: "center",
-      },
-      signUp: {
-        color: "rgba(255,255,255,1)",
-        fontSize: 16,
-        marginTop: 13,
-        marginLeft: 26,
+      loading: {
+        padding: 25,
       },
     });
 
     return (
       <View style={styles.container}>
-        <View style={styles.login_box}>
-          <View style={styles.username_boxStack}>
-            <View style={styles.username_box}>
-              <Text style={styles.user_title}>Username</Text>
-              <TextInput
-                style={styles.username}
-                autoCapitalize="none"
-                placeholder="Username"
-                onChangeText={(input) => {
-                  this.setState({ username: input });
-                }}
-              />
-            </View>
-            <Text style={styles.icon}>🏃</Text>
-          </View>
-          <View style={styles.password_box}>
-            <Text style={styles.pass_title}>Password</Text>
-            <TextInput
-              secureTextEntry={true}
-              style={styles.password}
-              autoCapitalize="none"
-              placeholder="Password"
-              onChangeText={(input) => {
-                this.setState({ password: input });
-              }}
-            />
-          </View>
-          <View style={styles.button_box}>
-            <TouchableOpacity
-              onPress={() => this.logIn()}
-              style={styles.login_btn}
-            >
-              <Text style={styles.signin}>Log In</Text>
-            </TouchableOpacity>
-            <View style={styles.login_btnFiller}></View>
-            <TouchableOpacity
-              onPress={() => this.signUp()}
-              style={styles.signup_btn}
-            >
-              <Text style={styles.signUp}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
+        <Text style={styles.icon}>🏃</Text>
+        <View style={styles.input_box}>
+          <Text style={styles.input_title}>Username</Text>
+          <TextInput
+            style={styles.input_placeholder}
+            autoCapitalize="none"
+            placeholder="Username"
+            onChangeText={(input) => {
+              this.setState({ username: input });
+            }}
+          />
         </View>
+        <View style={styles.input_box}>
+          <Text style={styles.input_title}>Password</Text>
+          <TextInput
+            secureTextEntry={true}
+            style={styles.input_placeholder}
+            autoCapitalize="none"
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={(input) => {
+              this.setState({ password: input });
+            }}
+          />
+        </View>
+        <View style={styles.btn_box}>
+          <TouchableOpacity
+            onPress={() => this.logIn()}
+            style={styles.btn_shape}
+          >
+            <Text style={styles.btn_text}>Log In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.signUp()}
+            style={[
+              styles.btn_shape,
+              { backgroundColor: "rgba(153,50,245,1)" },
+            ]}
+          >
+            <Text style={styles.btn_text}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+        <ActivityIndicator
+          animating={this.state.loading}
+          style={styles.loading}
+          size="large"
+        />
       </View>
     );
   }

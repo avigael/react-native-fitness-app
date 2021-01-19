@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Button, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 
 class Today extends React.Component {
   constructor(props) {
@@ -30,15 +36,18 @@ class Today extends React.Component {
     );
 
     response = await response.json();
-    let activities = await fetch("https://avigael-shop-fitness.herokuapp.com/activities", {
-      method: "GET",
-      headers: {
-        Accept: "*/*",
-        "x-access-token": token,
-        Connection: "keep-alive",
-        "cache-control": "no-cache",
-      },
-    });
+    let activities = await fetch(
+      "https://avigael-shop-fitness.herokuapp.com/activities",
+      {
+        method: "GET",
+        headers: {
+          Accept: "*/*",
+          "x-access-token": token,
+          Connection: "keep-alive",
+          "cache-control": "no-cache",
+        },
+      }
+    );
     activities = await activities.json();
     this.setState({
       goalDailyActivity: response.goalDailyActivity,
@@ -54,16 +63,25 @@ class Today extends React.Component {
     activities.forEach((x) => {
       exercise.push(
         <View
-          key={x.id}
           style={{
-            flexDirection: "row",
-            paddingTop: 30,
-            paddingLeft: 30,
+            alignItems: "center",
+            width: 340,
+            height: 100,
+            paddingTop: 8,
+            marginBottom: 15,
           }}
         >
-          <Text>{"Name: " + x.name + ", "}</Text>
-          <Text>{"Duration: " + x.duration + " min, "}</Text>
-          <Text>{"Calories: " + x.calories}</Text>
+          <View style={{
+            backgroundColor: "grey",
+            borderRadius: 15,
+            padding: 15,
+            width: "95%",
+            height: "95%",
+          }}>
+            <Text style={{ fontSize: 25, fontWeight: "bold" }}>{x.name}</Text>
+            <Text>{"Duration: " + x.duration + " min"}</Text>
+            <Text>{"Calories: " + x.calories + " cal"}</Text>
+          </View>
         </View>
       );
       activityTotal = activityTotal + x.duration;
@@ -71,18 +89,21 @@ class Today extends React.Component {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "center",
       },
       progress: {
-        width: 350,
-        height: 110,
+        width: "95%",
+        height: 125,
         marginTop: 15,
-        marginLeft: 13,
+        alignItems: "center",
       },
-      progress_title_box: {
-        width: 350,
-        height: 43,
+      title_box: {
         backgroundColor: "rgba(74,144,226,1)",
         borderRadius: 10,
+        width: "95%",
+        height: 40,
         justifyContent: "center",
       },
       title: {
@@ -90,159 +111,91 @@ class Today extends React.Component {
         fontSize: 22,
         alignSelf: "center",
       },
-      progress_title_boxFiller: {
-        flex: 1,
-      },
-      progress_boxes: {
-        width: 325,
-        height: 43,
+      progress_container: {
         flexDirection: "row",
-        marginLeft: 13,
+        width: "100%",
+        marginTop: 20,
+        justifyContent: "center",
       },
-      goal_box: {
-        width: 150,
-        height: 43,
-        borderRadius: 10,
+      progress_box: {
         backgroundColor: "rgba(213,218,223,1)",
-        alignSelf: "center",
+        width: "40%",
+        height: 55,
+        borderRadius: 10,
+        marginHorizontal: 25,
       },
-      goal_title: {
+      progress_title: {
         color: "#121212",
-        marginTop: -20,
         alignSelf: "center",
+        marginVertical: 4,
       },
-      goal_value: {
+      progress_value: {
         color: "#121212",
         fontSize: 20,
-        marginTop: 13,
+        fontWeight: "bold",
         alignSelf: "center",
       },
-      goal_boxFiller: {
-        flex: 1,
-        flexDirection: "row",
-      },
-      current_box: {
-        width: 150,
-        height: 43,
-        backgroundColor: "rgba(213,218,223,1)",
-        borderRadius: 10,
-        alignSelf: "center",
-      },
-      current_title: {
-        color: "#121212",
-        marginTop: -21,
-        alignSelf: "center",
-      },
-      current_value: {
-        color: "#121212",
-        fontSize: 20,
-        marginTop: 14,
-        alignSelf: "center",
-      },
-      exercise: {
-        width: 350,
-        height: 392,
-        marginTop: 26,
-        marginLeft: 13,
-      },
-      exercise_title_box: {
-        width: 350,
-        height: 43,
-        backgroundColor: "rgba(178,108,233,1)",
-        borderRadius: 10,
-      },
-      todaysActivity: {
-        color: "rgba(255,255,255,1)",
-        fontSize: 22,
-        marginTop: 6,
-        alignSelf: "center",
+      exercise_container: {
+        width: "95%",
+        height: 400,
+        alignItems: "center",
       },
       box: {
-        width: 350,
-        height: 290,
-        backgroundColor: "#E6E6E6",
+        backgroundColor: "rgba(213,218,223,1)",
         borderRadius: 10,
-        flex: 1,
-        marginBottom: -298,
-        marginTop: 15,
+        width: "95%",
+        height: 275,
         alignSelf: "center",
       },
-      exercise_title_boxFiller: {
-        flex: 1,
-      },
-      add: {
-        width: 150,
-        height: 43,
+      btn_shape: {
         backgroundColor: "rgba(178,108,233,1)",
         borderRadius: 10,
+        width: 200,
+        height: 40,
+        marginTop: 20,
         justifyContent: "center",
-        marginLeft: 0,
-        alignSelf: "center",
       },
-      addExercise: {
+      btn_text: {
         color: "rgba(255,255,255,1)",
-        fontSize: 18,
-        alignSelf: "center",
-      },
-      profile: {
-        width: 150,
-        height: 43,
-        backgroundColor: "rgba(74,150,226,1)",
-        borderRadius: 10,
-        justifyContent: "center",
-        marginTop: 24,
-        marginLeft: 113,
-      },
-      viewProfile: {
-        color: "rgba(255,255,255,1)",
-        fontSize: 18,
-        alignSelf: "center",
-      },
-      logout: {
-        width: 150,
-        height: 43,
-        backgroundColor: "rgba(225,72,72,1)",
-        borderRadius: 10,
-        justifyContent: "center",
-        marginTop: 17,
-        marginLeft: 113,
-      },
-      logOut: {
-        color: "rgba(255,255,255,1)",
-        fontSize: 18,
-        alignSelf: "center",
+        fontSize: 16,
+        textAlign: "center",
+        fontWeight: "bold",
       },
     });
 
     return (
       <View style={styles.container}>
         <View style={styles.progress}>
-          <View style={styles.progress_title_box}>
+          <View style={styles.title_box}>
             <Text style={styles.title}>Today's Progress! 🏃</Text>
           </View>
-          <View style={styles.progress_title_boxFiller}></View>
-          <View style={styles.progress_boxes}>
-            <View style={styles.goal_box}>
-              <Text style={styles.goal_title}>Current Goal</Text>
-              <Text style={styles.goal_value}>
+          <View style={styles.progress_container}>
+            <View style={styles.progress_box}>
+              <Text style={styles.progress_title}>Current Goal</Text>
+              <Text style={styles.progress_value}>
                 {this.state.goalDailyActivity + " min"}
               </Text>
             </View>
-            <View style={styles.goal_boxFiller}></View>
-            <View style={styles.current_box}>
-              <Text style={styles.current_title}>Current Total</Text>
-              <Text style={styles.current_value}>{activityTotal + " min"}</Text>
+            <View style={styles.progress_box}>
+              <Text style={styles.progress_title}>Current Total</Text>
+              <Text style={styles.progress_value}>
+                {activityTotal + " min"}
+              </Text>
             </View>
           </View>
         </View>
-        <View style={styles.exercise}>
-          <View style={styles.exercise_title_box}>
-            <Text style={styles.todaysActivity}>Today's Activity 🏋️</Text>
-            <View style={styles.box}>
-              <Text>{exercise}</Text>
-            </View>
+        <View style={styles.exercise_container}>
+          <View
+            style={[
+              styles.title_box,
+              { backgroundColor: "rgba(178,108,233,1)", marginVertical: 10 },
+            ]}
+          >
+            <Text style={styles.title}>Today's Activity 🏋️</Text>
           </View>
-          <View style={styles.exercise_title_boxFiller}></View>
+          <ScrollView horizontal={false} style={styles.box}>
+            <Text>{exercise}</Text>
+          </ScrollView>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("Exercise", {
@@ -250,9 +203,9 @@ class Today extends React.Component {
                 token: this.props.navigation.state.params.token,
               });
             }}
-            style={styles.add}
+            style={styles.btn_shape}
           >
-            <Text style={styles.addExercise}>Add Exercise</Text>
+            <Text style={styles.btn_text}>Add Exercise</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -262,15 +215,15 @@ class Today extends React.Component {
               token: this.props.navigation.state.params.token,
             })
           }
-          style={styles.profile}
+          style={[styles.btn_shape, { backgroundColor: "rgba(74,144,226,1)" }]}
         >
-          <Text style={styles.viewProfile}>View Profile</Text>
+          <Text style={styles.btn_text}>View Profile</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("Login")}
-          style={styles.logout}
+          style={[styles.btn_shape, { backgroundColor: "red" }]}
         >
-          <Text style={styles.logOut}>Log Out</Text>
+          <Text style={styles.btn_text}>Log Out</Text>
         </TouchableOpacity>
       </View>
     );
