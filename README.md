@@ -13,7 +13,7 @@ This Fitness App consist of 5 different screens. These screens include the **Log
 **Note**: Make sure you can [Expo](https://docs.expo.io/ "Expo") installed on your machine.
 
 ```
-$ https://github.com/avigael/react-native-fitness-app
+$ git clone https://github.com/avigael/react-native-fitness-app
 $ cd react-native-fitness-app
 $ npm install
 $ expo start
